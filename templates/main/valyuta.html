@@ -1,0 +1,108 @@
+{% extends 'layouts/base.html' %}
+{% load i18n %}  
+{% load my_tamplatefilter    %}
+{% block content%}
+
+
+    <nav class="navbar navbar-expand-lg navbar bg-dark border-bottom border-bottom-dark" data-bs-theme="dark">
+        <div class="container ">
+            {% get_current_language as lang %}
+            {% get_available_languages as LANGUAGES %}
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{lang}}
+                        </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        {% for language in  LANGUAGES%}
+                            <li><a class="dropdown-item {% if language.0 == lang %} bg-info text-dark {% endif %}" href="/{{language.0}}/{{request.path|slice:"4:"}}">{{ language.1 }}</a></li>
+                        {% endfor %}
+                    </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-3">
+        <div class="row d-flex">
+            <div class="col-7">
+                <table class="table table-hover shadow-lg p-3 mb-5 bg-body rounded">
+                    <thead class="bg-dark border-4">
+                        <tr class="text-info">
+                            <th><h5><i>{% trans "VALYUTANING NOMI" %}</i></h5></th>
+                            <th><h5><i>{% trans "SOTIB OLISH" %}</i></h5></th>
+                            <th><h5><i>{% trans "SOTISH"%}</i></h5></th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-info border-4">
+                        {% if request.path == '/uz/valyuta/' %}
+                            {% for res in response_uz%}
+                                {% if res.nbu_buy_price != None%}
+                                    <tr>
+                                        <td class="d-flex align-items-center">
+                                            <strong>{{res.title|upper}}</strong>
+                                            <strong class="ms-2">{{res.code}}</strong>
+                                        </td>
+                                        <td>
+                                            <strong>{{res.nbu_buy_price}}</strong>
+                                        </td>
+                                        <td>
+                                            <strong>{{res.nbu_cell_price}}</strong>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %} 
+                        {% elif request.path == '/en/valyuta/' %}
+                            {% for res in response_en%}
+                                {% if res.nbu_buy_price != None%}
+                                    <tr>
+                                        <td class="d-flex align-items-center">
+                                            <strong>{{res.title|upper}}</strong>
+                                            <strong class="ms-2">{{res.code}}</strong>
+                                        </td>
+                                        <td>
+                                            <strong>{{res.nbu_buy_price}}</strong>
+                                        </td>
+                                        <td>
+                                            <strong>{{res.nbu_cell_price}}</strong>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %} 
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-4 offset-1 mt-5">
+                <div class="card shadow p-3 mb-5 bg-body rounded" style="width: 22rem;">
+                    <div class="card-body">
+                        <div class="d-flex ">
+                            <h5 class="card-title me-5 mt-3"><i>{% trans "VALYUTA KONVERTORI" %}</i></h5>
+                            <img src="/static/imgs/bitcoin.png" alt="" width="90px" height="80px" class=" -secondary">
+                        </div>
+                        <div class="d-flex mt-3 mb-3">
+                            <form  action="{% url 'valyuta' %}" method="GET" class="d-flex">
+                                {% csrf_token %}
+                                <div>
+                                    <input type="text" placeholder="0" {% if summa %} value="{{summa}}"{% endif %} name="summa">
+                                    <input class="py-2 mt-3" placeholder="{{nbu_buy|number}}" disabled="">
+                                </div>
+                                <div>
+                                    <select class="ms-3 px-3 pb-1 bg-dars" name="money" value="{{ money }}">
+                                        {% for res in response_uz %}
+                                            {% if res.nbu_buy_price != None%}
+                                                <option  value="{{ res.code }} {{res.nbu_buy_price}}" {% if money == res.code %}selected{% endif %}>{{ res.code }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>   
+                                    <button type="submit" class="btn btn-success border mt-3 py-2 ms-2">{% trans "Ayirboshlash" %}</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

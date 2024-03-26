@@ -1,0 +1,46 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+	
+	<div class="top_navbar">
+		<div class="Gm"><a class="Gmail" href="https://mail.google.com/mail/?tab=wm">Gmail</a></div>
+		<div class="Im"><a class="Images" href="https://www.google.com/imghp?hl=en&tab=wi&ei=t4VpVpKCDYjQ-QH934FA&ved=0EKouCBUoAQ">Images</a></div>
+	</div>
+	<div class="middle">
+		<div class="Google_logo">
+			<img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png">
+		</div>
+		<div class="search_bar">
+			<form action="{% url 'google' %}" method="POST" name="s_bar">
+				{% csrf_token %}
+				<input class="sbar rounded-5 border-2 shadow-lg p-3 mb-5 bg-body rounded" type="text" name="search" autofocus="autofocus" placeholder="Введите поисковый запрос или url"><br/>
+				<div class="s_buttonS">
+					<input class="search_button" type="submit"value="Google Search">
+					<input class="lucky_button" type="submit" value="I'm Feeling Lucky">
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="bottom_navbar">
+		<div class="advertising">
+			<a href="https://www.google.com/intl/en/ads/?fg=1">Advertising</a>
+		</div>
+		<div class="business">
+			<a href="https://www.google.com/services/?fg=1">Business</a>
+		</div>
+		<div class="about">
+			<a href="https://www.google.com/intl/en/about/">About</a>
+		</div>
+		<div class="privacy">
+			<a href="https://www.google.com/intl/en/policies/privacy/?fg=1">Privacy</a>
+		</div>
+		<div class="terms">
+			<a href="https://www.google.com/intl/en/policies/terms/?fg=1">Terms</a>
+		</div>
+		<div class="settings">
+			<a href="https://www.google.com/preferences?hl=en">Settings</a>
+		</div>
+	</div>
+		
+{% endblock content %}
+
